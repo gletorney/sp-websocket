@@ -1,6 +1,7 @@
 const express     = require('express');
 const app         = express();
 const expressWs   = require('express-ws')(app);
+const morgan      = require('morgan');
 const compression = require('compression');
 const serveStatic = require('serve-static');
 const basicAuth   = require('basic-auth-connect');
@@ -10,12 +11,13 @@ const pass = process.env.PASS;
 
 let connects = [];
 
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 5000);
 
 if (user && pass) {
   app.use(basicAuth(user, pass));
 }
 
+app.use(morgan('dev'));
 app.use(compression());
 app.use(serveStatic(`${__dirname}/public`));
 
