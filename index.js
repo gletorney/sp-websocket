@@ -1,44 +1,30 @@
-const express     = require('express');
-const app         = express();
-const expressWs   = require('express-ws')(app);
-const morgan      = require('morgan');
-const compression = require('compression');
-const serveStatic = require('serve-static');
-const basicAuth   = require('basic-auth-connect');
+var WebSocketServer = require("ws").Server
+var http = require("http")
+var express = require("express")
+var app = express()
+var port = process.env.PORT || 5000
 
-const user = process.env.USER;
-const pass = process.env.PASS;
+app.use(express.static(__dirname + "/"))
 
-let connects = [];
+var server = http.createServer(app)
+server.listen(port)
 
-app.set('port', process.env.PORT || 5000);
+console.log("http server listening on %d", port)
 
-if (user && pass) {
-  app.use(basicAuth(user, pass));
-}
+var wss = new WebSocketServer({server: server})
+console.log("websocket server created")
 
-app.use(morgan('dev'));
-app.use(compression());
-app.use(serveStatic(`${__dirname}/public`));
-
-app.ws('/', (ws, req) => {
-  connects.push(ws);
-
-  ws.on('message', message => {
-    console.log('Received -', message);
-    
-    connects.forEach(socket => {
-      socket.send(message);
+wss.on('connection', function connection(ws) {
+  ws.on('message', function incoming(data) {
+    wss.clients.forEach(function each(client) {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(data);
+      }
     });
   });
-  
   ws.on('close', () => {
     connects = connects.filter(conn => {
       return (conn === ws) ? false : true;
     });
   });
-});
-
-app.listen(app.get('port'), () => {
-  console.log('Server listening on port %s', app.get('port'));
 });
