@@ -24,9 +24,7 @@ app.use(serveStatic(`${__dirname}/public`));
 app.ws('/', (ws, req) => {
   connects.push(ws);
 
-  ws.on('message', message => {
-    console.log('Received -', message);
-    
+  ws.on('message', message => {   
     connects.forEach(socket => {
       socket.send(message);
     });
