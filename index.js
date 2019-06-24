@@ -14,9 +14,8 @@ console.log("http server listening on %d", port)
 var wss = new WebSocketServer({server: server})
 console.log("websocket server created")
 
-app.ws('/', (ws, req) => {
-  connects.push(ws);
-
+wss.on('connection', function connection(ws) {
+  
   ws.on('message', message => {
     console.log('Received -', message);
     
@@ -30,8 +29,6 @@ app.ws('/', (ws, req) => {
       return (conn === ws) ? false : true;
     });
   });
+
 });
 
-app.listen(app.get('port'), () => {
-  console.log('Server listening on port %s', app.get('port'));
-});
