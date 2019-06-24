@@ -9,10 +9,8 @@ app.use(express.static(__dirname + "/"))
 var server = http.createServer(app)
 server.listen(port)
 
-console.log("http server listening on %d", port)
-
 var wss = new WebSocketServer({server: server})
-console.log("websocket server created")
+var connects = [];
 
 wss.on('connection', function connection(ws) {
   ws.on('message', function incoming(data) {
@@ -28,3 +26,5 @@ wss.on('connection', function connection(ws) {
     });
   });
 });
+
+console.log("Server listening on %d", port)
