@@ -12,34 +12,26 @@ server.listen(port)
 console.log("http server listening on %d", port)
 
 var wss = new WebSocketServer({server: server})
+console.log("websocket server created")
 
-app.ws('/', (wss, req) => {
+app.ws('/', (ws, req) => {
   connects.push(ws);
 
-  wss.on('message', message => {
+  ws.on('message', message => {
     console.log('Received -', message);
+    
     connects.forEach(socket => {
       socket.send(message);
     });
   });
   
-  wss.on('close', () => {
+  ws.on('close', () => {
     connects = connects.filter(conn => {
-      return (conn === wss) ? false : true;
+      return (conn === ws) ? false : true;
     });
   });
 });
 
-
-// var wss = new WebSocketServer({server: server})
-// console.log("websocket server created")
-
-// wss.on('connection', function connection(ws) {
-//   ws.on('message', function incoming(data) {
-//     wss.clients.forEach(function each(client) {
-//       if (client.readyState === WebSocket.OPEN) {
-//         client.send(data);
-//       }
-//     });
-//   });
-// });
+app.listen(app.get('port'), () => {
+  console.log('Server listening on port %s', app.get('port'));
+});
