@@ -1,18 +1,18 @@
-# Node.js Websocket Test
+# express-ws-chat-sample
 
-A tiny demo using the [einaros/ws](http://einaros.github.io/ws/) WebSockets implementation.
+Chat sample on Heroku using express-ws.
 
-# Running Locally
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
-``` bash
-npm install
-npm start
+![](https://i.gyazo.com/8c222f405d12f93f733526d2e74e45d5.gif)
+
+## Development
+
+```shell
+$ git clone https://github.com/y-temp4/express-ws-chat-sample
+$ cd express-ws-chat-sample
+$ yarn install # or npm i
+$ node server.js
 ```
 
-# Running on Heroku
-
-``` bash
-heroku create
-git push heroku master
-heroku open
-```
+And access to [localhost:3000](http://localhost:3000/).
