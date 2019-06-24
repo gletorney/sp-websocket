@@ -22,7 +22,7 @@ wss.on('connection', function connection(ws) {
       }
     });
   });
-  ws.on('close', () => {
+  ws.on('close', function(){
     connects = connects.filter(conn => {
       return (conn === ws) ? false : true;
     });
